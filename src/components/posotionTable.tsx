@@ -152,8 +152,8 @@ export function PositionTable() {
     isLoading, 
     error, 
     refreshPositions,
-    claimRewards,
-    withdraw
+    // claimRewards,
+    // withdraw
   } = useStaking({
     onStaked: (position) => {
       console.log('New position staked:', position);
@@ -186,36 +186,36 @@ export function PositionTable() {
     setTimeout(() => setIsRefreshing(false), 1000);
   };
 
-  const handleClaimRewards = async (positionId: string) => {
-    try {
-      await claimRewards();
-    } catch (err) {
-      console.error('Failed to claim rewards:', err);
-    }
-  };
+  // const handleClaimRewards = async (positionId: string) => {
+  //   try {
+  //     await claimRewards();
+  //   } catch (err) {
+  //     console.error('Failed to claim rewards:', err);
+  //   }
+  // };
 
-  const handleWithdraw = async () => {
-    try {
-      await withdraw();
-    } catch (err) {
-      console.error('Failed to withdraw:', err);
-    }
-  };
+  // const handleWithdraw = async () => {
+  //   try {
+  //     await withdraw();
+  //   } catch (err) {
+  //     console.error('Failed to withdraw:', err);
+  //   }
+  // };
 
   if (isLoading) {
     return (
-      <div className="rounded-md border">
+      <div className="rounded-md border mx-6">
         <div className="p-4">
           <div className="space-y-3">
             {[...Array(3)].map((_, i) => (
               <div key={i} className="flex items-center space-x-4">
-                <Skeleton className="h-4 w-24" />
-                <Skeleton className="h-4 w-16" />
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-4 w-20" />
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-4 w-32" />
-                <Skeleton className="h-8 w-20" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-4 w-1/7" />
+                <Skeleton className="h-8 w-1/7" />
               </div>
             ))}
           </div>
@@ -226,8 +226,8 @@ export function PositionTable() {
 
   if (error) {
     return (
-      <div className="rounded-md border">
-        <div className="text-center py-12">
+      <div className="rounded-md border mx-6">
+        <div className="text-center py-6">
           <IconAlertCircle className="h-12 w-12 text-red-500 mx-auto mb-4" />
           <p className="text-red-500 mb-2">Error loading positions</p>
           <p className="text-sm text-muted-foreground mb-4">{error.message}</p>
@@ -246,14 +246,14 @@ export function PositionTable() {
 
   const totalStaked = positions.reduce((sum, pos) => sum + parseFloat(pos.amount), 0);
   const totalRewards = positions.reduce((sum, pos) => sum + parseFloat(pos.reward), 0);
-  const hasClaimableRewards = positions.some(pos => parseFloat(pos.reward) > 0);
+  // const hasClaimableRewards = positions.some(pos => parseFloat(pos.reward) > 0);
 
   return (
-    <div className="rounded-md border">
+    <div className="rounded-md border mx-6">
       <Table>
         <TableCaption>
           {positions.length === 0 ? (
-            <div className="py-12 text-center">
+            <div className="py-4 text-center">
               <IconCoins className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-lg font-medium mb-2">No staking positions</p>
               <p className="text-muted-foreground">Start staking to see your positions here</p>
@@ -264,17 +264,6 @@ export function PositionTable() {
                 <span className="text-sm">
                   {positions.length} position{positions.length !== 1 ? 's' : ''}
                 </span>
-                {hasClaimableRewards && (
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() => handleClaimRewards(positions[0].id)}
-                    className="gap-1"
-                  >
-                    <IconTrendingUp className="h-3 w-3" />
-                    Claim All Rewards
-                  </Button>
-                )}
               </div>
               <Button 
                 variant="outline" 
@@ -300,7 +289,6 @@ export function PositionTable() {
                 <TableHead className="text-right">Rewards</TableHead>
                 <TableHead>Lock Progress</TableHead>
                 <TableHead>Unlock Time</TableHead>
-                <TableHead className="text-center">Actions</TableHead>
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -358,49 +346,7 @@ export function PositionTable() {
                         </span>
                       </div>
                     </TableCell>
-                    <TableCell>
-                      <div className="flex gap-1 justify-center">
-                        {hasRewards && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={() => handleClaimRewards(position.id)}
-                                  className="h-8 w-8 p-0"
-                                >
-                                  <IconTrendingUp className="h-3 w-3" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Claim rewards</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                        
-                        {position.canWithdraw && (
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <Button
-                                  size="sm"
-                                  variant="outline"
-                                  onClick={handleWithdraw}
-                                  className="h-8 w-8 p-0"
-                                >
-                                  <IconLock className="h-3 w-3" />
-                                </Button>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p>Withdraw stake unlock</p>
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        )}
-                      </div>
-                    </TableCell>
+                    
                   </TableRow>
                 );
               })}
@@ -431,7 +377,6 @@ export function PositionTable() {
                     maximumFractionDigits: 6
                   })}
                 </TableCell>
-                <TableCell></TableCell>
               </TableRow>
             </TableFooter>
           </>

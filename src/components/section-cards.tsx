@@ -116,19 +116,13 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Total Staked</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {totalStaked.toLocaleString(undefined, { 
-              minimumFractionDigits: 2, 
-              maximumFractionDigits: 6 
-            })}
+            {allTotalStaked.toLocaleString()}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
           <Badge variant="outline" className="gap-1">
             <IconTrendingUp className="h-3 w-3" />
-            Balance: {parseFloat(tokenBalance).toLocaleString(undefined, { 
-              minimumFractionDigits: 2, 
-              maximumFractionDigits: 6 
-            })}
+            Balance: {parseFloat(tokenBalance).toLocaleString()}
           </Badge>
         </CardFooter>
       </Card>
@@ -138,10 +132,7 @@ export function SectionCards() {
         <CardHeader>
           <CardDescription>Current Stake</CardDescription>
           <CardTitle className="text-2xl font-semibold tabular-nums @[250px]/card:text-3xl">
-            {currentStake.toLocaleString(undefined, { 
-              minimumFractionDigits: 2, 
-              maximumFractionDigits: 6 
-            })}
+            {currentStake.toLocaleString()}
           </CardTitle>
         </CardHeader>
         <CardFooter className="flex-col items-start gap-1.5 text-sm">
