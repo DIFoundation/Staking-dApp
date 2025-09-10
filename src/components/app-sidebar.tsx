@@ -29,7 +29,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
     { href: '/stake', icon: <Wallet />, label: 'Stake' },
     { href: '/unstake', icon: <ReceiptIcon />, label: 'Unstake' },
     { href: '/claim', icon: <CircleDollarSign />, label: 'Claim' },
-    { href: '/history', icon: <History />, label: 'History' },
+    { href: '/txHistory', icon: <History />, label: 'History' },
   ];
 
 
