@@ -4,8 +4,7 @@ import { useAccount } from 'wagmi';
 import { 
   IconClock, 
   IconCoins, 
-  IconRefresh, 
-  IconTrendingUp,
+  IconRefresh,
   IconLock,
   IconAlertCircle,
   IconCopy,

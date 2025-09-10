@@ -1,7 +1,6 @@
 import { useState, useEffect, useCallback } from 'react';
-import { Address, formatUnits, parseUnits } from 'viem';
+import { Address, erc20Abi, formatUnits, parseUnits } from 'viem';
 import { usePublicClient, useWalletClient } from 'wagmi';
-import { TOKEN_ABI } from '@/lib/abi';
 import { CONTRACT_ADDRESS, TOKEN_ADDRESS, TokenInfo } from './types';
 
 export function useToken(account?: Address) {
@@ -24,13 +23,13 @@ export function useToken(account?: Address) {
       const [balance, allowance] = await Promise.all([
         publicClient.readContract({
           address: TOKEN_ADDRESS,
-          abi: TOKEN_ABI,
+          abi: erc20Abi,
           functionName: 'balanceOf',
           args: [userAddress],
         }) as Promise<bigint>,
         publicClient.readContract({
           address: TOKEN_ADDRESS,
-          abi: TOKEN_ABI,
+          abi: erc20Abi,
           functionName: 'allowance',
           args: [userAddress, CONTRACT_ADDRESS],
         }) as Promise<bigint>
@@ -61,7 +60,7 @@ export function useToken(account?: Address) {
       const { request } = await publicClient.simulateContract({
         account: walletClient.account,
         address: TOKEN_ADDRESS,
-        abi: TOKEN_ABI,
+        abi: erc20Abi,
         functionName: 'approve',
         args: [CONTRACT_ADDRESS, amountBigInt],
       });

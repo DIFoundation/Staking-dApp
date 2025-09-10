@@ -25,7 +25,7 @@ export function SectionCards() {
 
   // Calculate derived values
   const { 
-    totalStaked, 
+    // totalStaked, 
     totalRewards, 
     currentStake, 
     maturityDate, 
