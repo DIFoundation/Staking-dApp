@@ -55,7 +55,7 @@ export default function TxHistory() {
                                         <TableHead className="text-right">Amount</TableHead>
                                         <TableHead>Timestamp</TableHead>
                                         <TableHead>Action</TableHead>
-                                        <TableHead>Staked</TableHead>
+                                        <TableHead className='text-right'>Staked</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 {isLoading && <TableBody>
@@ -70,15 +70,15 @@ export default function TxHistory() {
                                         eventInfo?.map(event => (
                                             <TableRow key={event.txHash}>
                                                 <TableCell>
-                                                    <Link href={`https://sepolia.etherscan.io/tx/${event.txHash }`} target="_blank">
+                                                    <Link href={`https://sepolia.etherscan.io/tx/${event.txHash }`} target="_blank" className='underline'>
                                                     {`${event.txHash.slice(0, 6)}...${event.txHash.slice(-4)}`}
                                                     </Link>
                                                     </TableCell>
                                                 <TableCell>{`${event.user.slice(0, 6)}...${event.user.slice(-4)}`}</TableCell>
                                                 <TableCell className="text-right">{(Number(event.amount)/1e18).toFixed(2)}</TableCell>
-                                                <TableCell>{event.timestamp}</TableCell>
+                                                <TableCell>{new Date(Number(event.timestamp)*1000).toLocaleString()}</TableCell>
                                                 <TableCell>{event.type}</TableCell>
-                                                <TableCell>{(Number(event.newTotalStaked)/1e18).toFixed(2)}</TableCell>
+                                                <TableCell className='text-right'>{(Number(event.newTotalStaked)/1e18).toFixed(2)}</TableCell>
                                             </TableRow>
                                         ))
                                     }
