@@ -43,3 +43,20 @@ export type TokenInfo = {
 
 export const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_STAKING_CONTRACT_ADDRESS as Address;
 export const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TOKEN_CONTRACT_ADDRESS as Address;
+
+export type TransactionEvent = {
+  txHash: string;
+  user: string;
+  timestamp: number;
+  blockNumber: bigint;
+  type: 'Staked' | 'Withdrawn' | 'EmergencyWithdrawn' | 'RewardsClaimed';
+  amount?: bigint;
+  newTotalStaked?: bigint;
+  currentRewardRate?: bigint;
+  rewardsAccrued?: bigint;
+  penalty?: bigint;
+  newPendingRewards?: bigint;
+  totalStaked?: bigint;
+};
+
+export type TransactionHistory = TransactionEvent[];

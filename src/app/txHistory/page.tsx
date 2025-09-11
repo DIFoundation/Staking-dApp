@@ -1,4 +1,5 @@
-import React from 'react'
+'use client'
+import React, { useEffect } from 'react'
 import { SidebarProvider, SidebarInset } from '@/components/ui/sidebar'
 import { AppSidebar } from '@/components/app-sidebar'
 import { SiteHeader } from '@/components/site-header'
@@ -16,8 +17,20 @@ import {
     CardHeader,
     CardTitle,
 } from "@/components/ui/card"
+import { useEvents } from "@/hooks/useEvents"
+import Link from 'next/link'
+import { Skeleton } from '@/components/ui/skeleton'
 
-export default function txHistory() {
+export default function TxHistory() {
+    const { eventInfo, isLoading, fetchEvents } = useEvents();
+
+    console.log('######eventInfo####### ', eventInfo)
+
+    // Fetch events on component mount
+    useEffect(() => {
+        fetchEvents();
+    }, [fetchEvents]);
+
     return (
         <div>
             <SidebarProvider
@@ -37,6 +50,7 @@ export default function txHistory() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
+                                    <TableHead>Hash</TableHead>
                                         <TableHead>Users</TableHead>
                                         <TableHead className="text-right">Amount</TableHead>
                                         <TableHead>Timestamp</TableHead>
@@ -44,16 +58,30 @@ export default function txHistory() {
                                         <TableHead>Staked</TableHead>
                                     </TableRow>
                                 </TableHeader>
+                                {isLoading && <TableBody>
+                                    <TableRow>
+                                        <TableCell colSpan={6} className="h-24 text-center">
+                                            <Skeleton className="h-4 w-20" />
+                                        </TableCell>
+                                    </TableRow>
+                                </TableBody>}
                                 <TableBody>
-                                    {invoices.map((invoice) => (
-                                        <TableRow key={invoice.invoice}>
-                                            <TableCell>{invoice.invoice}</TableCell>
-                                            <TableCell className="text-right">{invoice.paymentStatus}</TableCell>
-                                            <TableCell>{invoice.paymentMethod}</TableCell>
-                                            <TableCell>{invoice.totalAmount}</TableCell>
-                                            <TableCell>{invoice.totalAmount}</TableCell>
-                                        </TableRow>
-                                    ))}
+                                    {
+                                        eventInfo?.map(event => (
+                                            <TableRow key={event.txHash}>
+                                                <TableCell>
+                                                    <Link href={`https://sepolia.etherscan.io/tx/${event.txHash }`} target="_blank">
+                                                    {`${event.txHash.slice(0, 6)}...${event.txHash.slice(-4)}`}
+                                                    </Link>
+                                                    </TableCell>
+                                                <TableCell>{`${event.user.slice(0, 6)}...${event.user.slice(-4)}`}</TableCell>
+                                                <TableCell className="text-right">{(Number(event.amount)/1e18).toFixed(2)}</TableCell>
+                                                <TableCell>{event.timestamp}</TableCell>
+                                                <TableCell>{event.type}</TableCell>
+                                                <TableCell>{(Number(event.newTotalStaked)/1e18).toFixed(2)}</TableCell>
+                                            </TableRow>
+                                        ))
+                                    }
                                 </TableBody>
                             </Table>
                         </CardContent>
@@ -63,50 +91,3 @@ export default function txHistory() {
         </div>
     )
 }
-
-
-
-const invoices = [
-    {
-        invoice: "INV001",
-        paymentStatus: "Paid",
-        totalAmount: "$250.00",
-        paymentMethod: "Credit Card",
-    },
-    {
-        invoice: "INV002",
-        paymentStatus: "Pending",
-        totalAmount: "$150.00",
-        paymentMethod: "PayPal",
-    },
-    {
-        invoice: "INV003",
-        paymentStatus: "Unpaid",
-        totalAmount: "$350.00",
-        paymentMethod: "Bank Transfer",
-    },
-    {
-        invoice: "INV004",
-        paymentStatus: "Paid",
-        totalAmount: "$450.00",
-        paymentMethod: "Credit Card",
-    },
-    {
-        invoice: "INV005",
-        paymentStatus: "Paid",
-        totalAmount: "$55",
-        paymentMethod: "PayPal",
-    },
-    {
-        invoice: "INV006",
-        paymentStatus: "Pending",
-        totalAmount: "$200.00",
-        paymentMethod: "Bank Transfer",
-    },
-    {
-        invoice: "INV007",
-        paymentStatus: "Unpaid",
-        totalAmount: "$300.00",
-        paymentMethod: "Credit Card",
-    },
-]
