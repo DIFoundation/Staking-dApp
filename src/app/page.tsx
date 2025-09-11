@@ -1,3 +1,4 @@
+'use client'
 import { AppSidebar } from "@/components/app-sidebar"
 import { PositionTable } from "@/components/posotionTable"
 // import { ChartAreaInteractive } from "@/components/chart-area-interactive"
@@ -7,8 +8,11 @@ import {
   SidebarInset,
   SidebarProvider,
 } from "@/components/ui/sidebar"
-
+import { TableCaption } from "@/components/ui/table"
+import { useRouter } from "next/navigation"
 export default function Page() {
+
+  const router = useRouter()
   return (
     <SidebarProvider
       style={
@@ -30,6 +34,8 @@ export default function Page() {
               </div>
               {/* <DataTable data={data} /> */}
               <PositionTable />
+              <TableCaption>Check <button onClick={() => {router.push('/txHistory')}} className="underline cursor-pointer">History</button> to see all activities on the dApp</TableCaption>
+
             </div>
           </div>
         </div>

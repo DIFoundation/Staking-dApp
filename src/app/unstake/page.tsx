@@ -22,13 +22,16 @@ import { useState } from "react"
 import { useStakingActions } from "@/hooks/useStakingActions"
 import { useUserPositions } from "@/hooks/useUserPositions"
 import { useStakingContract } from "@/hooks/useStakingContract"
+import { toast } from "sonner"
+import { useAccount } from "wagmi"
 
 export default function UnstakePage() {
 
+  const { address } = useAccount()
   const [amount, setAmount] = useState('');
+  const [isWithdrawing, setIsWithdrawing] = useState(false);
 
   const {
-    isLoading,
     withdraw,
     emergencyWithdraw,
   } = useStakingActions();
@@ -39,6 +42,50 @@ export default function UnstakePage() {
 
   const { contractInfo } = useStakingContract();
   const emergencyWithdrawPenalty = contractInfo?.emergencyWithdrawPenalty || 0;
+
+  const handleWithdraw = async () => {
+    if (!amount) {
+      toast.error('Please enter an amount to withdraw');
+      return;
+    }
+    if (!address) {
+      toast.error('Handle withdraw: Please connect your wallet');
+      return;
+    }
+
+    try {
+      setIsWithdrawing(true);
+      await toast.promise(withdraw(amount), {
+        loading: 'Withdrawing tokens...',
+        success: 'Tokens withdrawn successfully!',
+        error: (err) => `Withdrawal failed: ${err.message || 'Unknown error'}`,
+      });
+    } catch (err) {
+      console.error('Withdrawal failed:', err);
+    } finally {
+      setIsWithdrawing(false);
+    }
+  };
+
+  const handleEmergencyWithdrawn = async () => {
+    if (!address) {
+      toast.error('Handle emergency withdraw: Please connect your wallet');
+      return;
+    }
+
+    try {
+      setIsWithdrawing(true);
+      await toast.promise(emergencyWithdraw(), {
+        loading: 'Withdrawing tokens...',
+        success: 'Tokens withdrawn successfully!',
+        error: (err) => `Withdrawal failed: ${err.message || 'Unknown error'}`,
+      });
+    } catch (err) {
+      console.error('Withdrawal failed:', err);
+    } finally {
+      setIsWithdrawing(false);
+    }
+  };
 
   return (
     <SidebarProvider
@@ -71,7 +118,7 @@ export default function UnstakePage() {
                     <div className="flex flex-col gap-2">
                       <Input
                         id="amount"
-                        type="text"
+                        type="number"
                         placeholder="0.00"
                         value={amount}
                         onChange={(e) => setAmount(e.target.value)}
@@ -85,11 +132,11 @@ export default function UnstakePage() {
                 </CardContent>
                 <CardFooter>
                   <Button 
-                    onClick={() => withdraw(amount)} 
-                    disabled={isLoading || !amount}
+                    onClick={handleWithdraw} 
+                    disabled={isWithdrawing || !amount}
                     className="w-full"
                   >
-                    {isLoading ? 'Withdrawing...' : 'Withdraw'}
+                    {isWithdrawing ? 'Withdrawing...' : 'Withdraw'}
                   </Button>
                 </CardFooter>
               </Card>
@@ -107,11 +154,11 @@ export default function UnstakePage() {
                 </CardHeader>
                 <CardFooter className="flex flex-col gap-2">
                   <Button 
-                    onClick={() => emergencyWithdraw()} 
-                    disabled={isLoading}
+                    onClick={handleEmergencyWithdrawn} 
+                    disabled={isWithdrawing || !address}
                     className="w-full bg-destructive hover:bg-destructive/90"
                   >
-                    {isLoading ? 'Withdrawing...' : 'Emergency Withdrawal'}
+                    {isWithdrawing ? 'Withdrawing...' : 'Emergency Withdrawal'}
                   </Button>
                   <CardDescription>
                     Current Stake: {currentStake}

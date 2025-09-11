@@ -32,16 +32,6 @@ import {
   TooltipTrigger,
 } from "./ui/tooltip"
 
-// const formatDate = (timestamp: number) => {
-//   return new Date(timestamp * 1000).toLocaleDateString('en-US', {
-//     year: 'numeric',
-//     month: 'short',
-//     day: 'numeric',
-//     hour: '2-digit',
-//     minute: '2-digit'
-//   });
-// };
-
 const formatTimeRemaining = (endTime: number) => {
   const now = Math.floor(Date.now() / 1000);
   const remaining = endTime - now;
@@ -255,7 +245,7 @@ export function PositionTable() {
             <div className="py-4 text-center">
               <IconCoins className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
               <p className="text-lg font-medium mb-2">No staking positions</p>
-              <p className="text-muted-foreground">Start staking to see your positions here</p>
+              <p className="text-muted-foreground">{address ? "Start staking to see your positions here" : "Connect wallet to see your positions"}</p>
             </div>
           ) : (
             <div className="flex justify-between items-center p-2">

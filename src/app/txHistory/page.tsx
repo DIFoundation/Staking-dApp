@@ -50,12 +50,12 @@ export default function TxHistory() {
                             <Table>
                                 <TableHeader>
                                     <TableRow>
-                                    <TableHead>Hash</TableHead>
-                                        <TableHead>Users</TableHead>
-                                        <TableHead className="text-right">Amount</TableHead>
-                                        <TableHead>Timestamp</TableHead>
-                                        <TableHead>Action</TableHead>
-                                        <TableHead className='text-right'>Staked</TableHead>
+                                    <TableHead className='font-semibold'>Hash</TableHead>
+                                        <TableHead className='font-semibold'>Users</TableHead>
+                                        <TableHead className="text-right font-semibold">Amount</TableHead>
+                                        <TableHead className='font-semibold'>Timestamp</TableHead>
+                                        <TableHead className='font-semibold'>Action</TableHead>
+                                        <TableHead className='text-right font-semibold'>Staked</TableHead>
                                     </TableRow>
                                 </TableHeader>
                                 {isLoading && <TableBody>

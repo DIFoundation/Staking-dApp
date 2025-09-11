@@ -104,7 +104,7 @@ export default function StakePage() {
               <div className="flex flex-col gap-2">
                 <Input
                   id="amount"
-                  type="text"
+                  type="number"
                   placeholder="0.00"
                   value={amount}
                   onChange={(e) => setAmount(e.target.value)}
